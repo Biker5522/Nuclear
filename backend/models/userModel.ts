@@ -3,15 +3,13 @@ import mongoose from 'mongoose'
 const UserSchema = new mongoose.Schema({
   fullName: {
     type: String,
-    enum: ['admin', 'user', 'moderator'],
-    default: 'user',
   },
   nation: {
     type: String,
     required: true,
     min: 5,
   },
-  mail: {
+  email: {
     type: String,
     required: true,
     min: 5,

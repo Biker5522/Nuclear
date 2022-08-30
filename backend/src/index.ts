@@ -6,6 +6,15 @@ require('dotenv').config()
 const app = express()
 app.use(express.json())
 
+//Routes
+//Pens
+const routerSatellites = require('../routes/satellites')
+app.use('/satellites', routerSatellites)
+
+//Users
+const routerUsers = require('../routes/users')
+app.use('/', routerUsers)
+
 //Deployment
 __dirname = path.resolve()
 let NODE_ENV = 'producti'
