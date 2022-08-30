@@ -2,6 +2,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import '../stylesheets/navbar.css'
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap'
 import { BrowserRouter as Router, Routes, Link, Route } from 'react-router-dom'
+import { LoginPage } from '../sites/loginPage'
+import { RegisterPage } from '../sites/registerPage'
 
 function NavbarNuclear() {
   return (
@@ -23,8 +25,8 @@ function NavbarNuclear() {
                 </Nav.Link>
               </Nav>
               <Nav>
-                <Nav.Link as={Link} to={'/'}>
-                  Logout
+                <Nav.Link as={Link} to={'/register'}>
+                  Register
                 </Nav.Link>
               </Nav>
             </Navbar.Collapse>
@@ -32,9 +34,9 @@ function NavbarNuclear() {
         </Navbar>
       </div>
       <Routes>
-        <Route path="/" />
-        <Route path="/login" />
-        <Route path="/register" />
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
     </Router>
   )
