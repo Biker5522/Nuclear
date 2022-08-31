@@ -41,10 +41,15 @@ const SatelliteSchema = new mongoose.Schema({
   },
   dateOfCreation: {
     type: Date,
+    default: Date.now(),
     required: true,
   },
   dateOfLastUpdate: {
     type: Date,
+    required: true,
+  },
+  country: {
+    type: String,
     required: true,
   },
 })

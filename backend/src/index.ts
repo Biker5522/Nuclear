@@ -7,7 +7,7 @@ const app = express()
 app.use(express.json())
 
 //Routes
-//Pens
+//Satellites
 const routerSatellites = require('../routes/satellites')
 app.use('/satellites', routerSatellites)
 
@@ -32,8 +32,8 @@ if (NODE_ENV === 'production') {
 
 //Database
 mongoose.connect(
-  'mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@rest.xarzi.mongodb.net/NuclearDb?retryWrites=true&w=majority',
+  'mongodb+srv://dawid:cichy@rest.xarzi.mongodb.net/NuclearDb?retryWrites=true&w=majority',
   () => console.log('Connected to Database'),
 )
 
-app.listen(process.env.PORT || 5000, () => console.log('Server Running'))
+app.listen(5000, () => console.log('Server Running'))

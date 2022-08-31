@@ -7,11 +7,15 @@ import { useCookies } from 'react-cookie'
 import { countryList } from '../components/countriesList'
 
 export const RegisterPage = () => {
-  const [fullName, setFullname] = useState('')
+  const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [nation, setNation] = useState('')
   const [nuclearButton, setNuclearButton] = useState(false)
+
+  const onSwitchAction = () => {
+    setNuclearButton(!nuclearButton)
+  }
 
   let [errorMsg, setError] = useState('')
   const [cookies, setCookie] = useCookies(['token'])
@@ -23,10 +27,13 @@ export const RegisterPage = () => {
     //Api connect POST User
     await axios
       .post(
-        '/register',
+        'users/register',
         {
+          fullName,
           email,
           password,
+          nation,
+          nuclearButton,
         },
         { withCredentials: true },
       )
@@ -56,11 +63,12 @@ export const RegisterPage = () => {
                 <Form.Group className="mb-3" controlId="formBasicName">
                   <Form.Label>Full Name</Form.Label>
                   <Form.Control
-                    type="email"
+                    type="text"
                     placeholder="Full Name"
-                    value={email}
-                    onChange={(e: any) => setEmail(e.target.value)}
+                    value={fullName}
+                    onChange={(e: any) => setFullName(e.target.value)}
                   />
+
                   {/* Nation Form */}
                   <Form.Label>Nation</Form.Label>
                   <Form.Select
@@ -73,6 +81,7 @@ export const RegisterPage = () => {
                     ))}
                     );
                   </Form.Select>
+
                   {/* Email Form */}
                   <Form.Label>Email Adress</Form.Label>
                   <Form.Control
@@ -91,7 +100,12 @@ export const RegisterPage = () => {
                   />
                   <Form>
                     <Form.Label>Do you have a nuclear button?</Form.Label>
-                    <Form.Check type="switch" id="nuclear-switch" />
+                    <Form.Check
+                      type="switch"
+                      id="nuclear-switch"
+                      checked={nuclearButton}
+                      onChange={onSwitchAction}
+                    />
                   </Form>
                 </Form.Group>
                 <Link to="/login">You have an account? </Link>

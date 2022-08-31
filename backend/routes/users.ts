@@ -1,6 +1,6 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
-const User = require('..//Models/UserModel')
+const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 
 //POST Add User
@@ -8,14 +8,20 @@ router.post('/register', async (req: any, res: any) => {
   //Add
   const user = new User({
     fullName: req.body.fullName,
-    nation: req.body.nation,
-    mail: req.body.mail,
+    email: req.body.email,
     password: req.body.password,
+    nation: req.body.nation,
     nuclearButton: req.body.nuclearButton,
-    dateOfCreation: req.body.dateOfCreation,
   })
+  //Check mail
   const emailExist = await User.findOne({ email: req.body.email })
   if (emailExist) return res.status(400).send('Email exist')
+
+  //Check nation
+  const nationExist = await User.findOne({ nation: req.body.nation })
+  if (nationExist)
+    return res.status(400).send('There is already president of that country')
+
   //save
   try {
     const savedUser = await user.save()
@@ -41,7 +47,5 @@ router.post('/login', async (req: any, res: any) => {
   console.log(token)
   res.cookie('token', token).send(token)
 })
-
-
 
 module.exports = router
