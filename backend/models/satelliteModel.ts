@@ -8,7 +8,7 @@ const SatelliteSchema = new mongoose.Schema({
   producer: {
     type: String,
     required: true,
-    min: 5,
+    min: 2,
   },
   model: {
     type: String,
@@ -41,10 +41,17 @@ const SatelliteSchema = new mongoose.Schema({
   },
   dateOfCreation: {
     type: Date,
+    default: Date.now(),
     required: true,
   },
   dateOfLastUpdate: {
     type: Date,
+    default: Date.now(),
     required: true,
   },
+  nation: {
+    type: String,
+    required: false,
+  },
 })
+module.exports = mongoose.model('Satellite', SatelliteSchema)
