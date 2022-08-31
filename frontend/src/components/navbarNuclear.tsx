@@ -8,6 +8,7 @@ import { SatellitesListPage } from '../sites/satellitesController/satellitesList
 import { SatelliteAddPage } from '../sites/satellitesController/satelliteAddPage'
 import { useCookies } from 'react-cookie'
 import jwt_decode from 'jwt-decode'
+import { SatelliteEditPage } from '../sites/satellitesController/satelliteEditPage'
 
 function NavbarNuclear() {
   //Get token from cookies
@@ -54,6 +55,7 @@ function NavbarNuclear() {
           <Route path="/" element={<SatellitesListPage />} />
           <Route path="/satellites" element={<SatellitesListPage />} />
           <Route path="/satellites/add" element={<SatelliteAddPage />} />
+          <Route path="/satellites/edit/:id" element={<SatelliteEditPage />} />
         </Routes>
       </Router>
     )
