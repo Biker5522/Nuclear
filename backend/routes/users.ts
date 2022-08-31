@@ -41,7 +41,7 @@ router.post('/login', async (req: any, res: any) => {
   if (!passVal) return res.status(400).send('Invalid account')
   //create token and returnc cookie
   const token = jwt.sign(
-    { _id: user._id, _role: user.role },
+    { _id: user._id, nation: user.nation },
     process.env.TOKEN_SECRET,
   )
   console.log(token)

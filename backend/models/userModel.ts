@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 const UserSchema = new mongoose.Schema({
   fullName: {
     type: String,
+    max: 40,
   },
   nation: {
     type: String,
@@ -18,6 +19,7 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    max: 50,
   },
   nuclearButton: {
     type: Boolean,

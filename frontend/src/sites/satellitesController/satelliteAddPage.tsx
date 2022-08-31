@@ -4,41 +4,65 @@ import { Row, Col, FormGroup, Form, Button } from 'react-bootstrap'
 import { useCookies } from 'react-cookie'
 import { Link, useNavigate } from 'react-router-dom'
 
-export const PenAddPage = () => {
+export const SatelliteAddPage = () => {
   const [sideNumber, setSideNumber] = useState('')
   const [producer, setProducer] = useState('')
   const [model, setModel] = useState('')
   const [softwareVersion, setSoftwareVersion] = useState('')
   const [yearOfProduction, setYearOfProduction] = useState('')
-  const [dateOfLauch, setDateOfLaunch] = useState('')
-  const [quantityOfAmmunition, setQuantityOfAmmunition] = useState('')
-  const [orbitAltitude, setOrbitAltitude] = useState('')
+  const [dateOfLaunch, setDateOfLaunch] = useState('')
+  const [quantityOfAmmunition, setQuantityOfAmmunition] = useState(0)
+  const [orbitAltitude, setOrbitAltitude] = useState(0)
   const [AI, setAI] = useState(false)
-  const [dateOfCreation, setDateOfCreation] = useState('')
-  const [dateOfLastUpdate, setDateOfLastUpdate] = useState('')
   const [error, setError] = useState('')
+
+  //Get token from cookies
+  const [cookies, setCookie, removeCookie] = useCookies(['token'])
+  let token = cookies.token
+
+  const headers = {
+    'Content-Type': 'application/json',
+    token: token,
+  }
 
   const SubmitHandler = async (e: SyntheticEvent) => {
     e.preventDefault()
     //Api connect POST User
-    await axios.post('/satellites/add', {}).catch((error) => {
-      if (error.response) {
-        console.log(error)
-        setError(error.response.data)
-      }
-    })
+    await axios
+      .post('/satellites/add', {
+        token: token,
+        sideNumber: sideNumber,
+        producer: producer,
+        model: model,
+        softwareVersion: softwareVersion,
+        yearOfProduction: yearOfProduction,
+        dateOfLaunch: dateOfLaunch,
+        quantityOfAmmunition: quantityOfAmmunition,
+        orbitAltitude: orbitAltitude,
+        AI: AI,
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error)
+          setError(error.response.data)
+        }
+      })
   }
+
+  const onSwitchAction = () => {
+    setAI(!AI)
+  }
+
   return (
     <div className="">
       <Row>
         <Col sm={2} />
         <Col sm={8} className="addCard">
           <div className="Card">
-            <h2>New Satellite</h2>
+            <h2 className="pt-4">New Satellite</h2>
             <h5 className="AlertDanger">{error}</h5>
-            <Form onSubmit={SubmitHandler}>
+            <Form onSubmit={SubmitHandler} className="FormCard">
               <Form.Group>
-                <Form.Label>Satellite</Form.Label>
                 <label>Side Number</label>
                 <Form.Control
                   type="text"
@@ -46,6 +70,7 @@ export const PenAddPage = () => {
                   value={sideNumber}
                   onChange={(e: any) => setSideNumber(e.target.value)}
                 />
+
                 <label>Producer</label>
                 <Form.Control
                   type="text"
@@ -56,23 +81,24 @@ export const PenAddPage = () => {
 
                 <label>Model</label>
                 <Form.Control
-                  type="number"
-                  placeholder="Enter Price"
+                  type="text"
+                  placeholder="Enter Model"
                   value={model}
                   onChange={(e: any) => setModel(e.target.value)}
                 />
               </Form.Group>
+
               <label>Software Version</label>
               <Form.Control
                 type="text"
-                placeholder="Enter url"
+                placeholder="Enter Software Version"
                 value={softwareVersion}
                 onChange={(e: any) => setSoftwareVersion(e.target.value)}
               />
+
               <label>Year of Production</label>
               <Form.Control
-                type="text"
-                placeholder="Enter url"
+                type="date"
                 value={yearOfProduction}
                 onChange={(e: any) => setYearOfProduction(e.target.value)}
               />
@@ -80,14 +106,14 @@ export const PenAddPage = () => {
               <label>Date of launch</label>
               <Form.Control
                 type="date"
-                placeholder="Enter url"
-                value={dateOfLauch}
+                value={dateOfLaunch}
                 onChange={(e: any) => setDateOfLaunch(e.target.value)}
               />
+
               <label>Quantity of Ammunition</label>
               <Form.Control
                 type="number"
-                placeholder="Enter url"
+                placeholder="Enter number of ammunition"
                 value={quantityOfAmmunition}
                 onChange={(e: any) => setQuantityOfAmmunition(e.target.value)}
               />
@@ -101,20 +127,12 @@ export const PenAddPage = () => {
               />
 
               <label>AI</label>
-              <Form.Control type="text" placeholder="Enter url" />
-              <label>Date of Creation</label>
-              <Form.Control
-                type="date"
-                placeholder="Enter url"
-                value={dateOfCreation}
-                onChange={(e: any) => setDateOfCreation(e.target.value)}
-              />
-              <label>Date of Last Update</label>
-              <Form.Control
-                type="date"
-                placeholder="Enter url"
-                value={dateOfLastUpdate}
-                onChange={(e: any) => setDateOfLastUpdate(e.target.value)}
+              <Form.Label>Does it have an AI?</Form.Label>
+              <Form.Check
+                type="switch"
+                id="nuclear-switch"
+                checked={AI}
+                onChange={onSwitchAction}
               />
               <div className="pt-3">
                 <Button type="submit" variant="success">

@@ -1,6 +1,7 @@
 import express, { Response, Request } from 'express'
 const router = express.Router()
 const Satellite = require('../models/satelliteModel')
+import jwt_decode from 'jwt-decode'
 
 //GET
 router.get('/', async (req: Request, res: Response) => {
@@ -14,20 +15,31 @@ router.get('/', async (req: Request, res: Response) => {
 })
 
 //POST
-router.post('/', async (req: Request, res: Response) => {
+router.post('/add', async (req: Request, res: Response) => {
+  let decodedToken: any = jwt_decode(req.body.token)
+  let nationToken = decodedToken.nation
+  console.log(decodedToken)
   const satellite = new Satellite({
     sideNumber: req.body.sideNumber,
     producer: req.body.producer,
     model: req.body.model,
-    softwareVersions: req.body.softwareVersion,
+    softwareVersion: req.body.softwareVersion,
     yearOfProduction: req.body.yearOfProduction,
     dateOfLaunch: req.body.dateOfLaunch,
-    quantityOfAmunnition: req.body.quantityOfAmmunition,
+    quantityOfAmmunition: req.body.quantityOfAmmunition,
     orbitAltitude: req.body.orbitAltitude,
     AI: req.body.AI,
-    dateOfCreation: req.body.dateOfCreation,
-    dateOfLastUpdate: req.body.dateOfLastUpdate,
+    nation: nationToken,
   })
+
+  const dateValid = new Date('1900-01-01')
+  if (
+    !(
+      satellite.yearOfProduction <= Date.now() &&
+      satellite.yearOfProduction > dateValid
+    )
+  )
+    return res.status(400).send('Invalid year of production')
   //save
   try {
     const savedSatellite = await satellite.save()
