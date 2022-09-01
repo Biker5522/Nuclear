@@ -26,21 +26,16 @@ export const RegisterPage = () => {
     e.preventDefault()
     //Api connect POST User
     await axios
-      .post(
-        'users/register',
-        {
-          fullName,
-          email,
-          password,
-          nation,
-          nuclearButton,
-        },
-        { withCredentials: true },
-      )
+      .post('/register', {
+        fullName: fullName,
+        email: email,
+        password: password,
+        nation: nation,
+        nuclearButton: nuclearButton,
+      })
       //Set Cookie
-      .then((res) => {
-        setCookie('token', res.data)
-        navigate('/')
+      .then(() => {
+        navigate('/login')
       })
       .catch((error) => {
         if (error.response) {

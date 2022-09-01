@@ -5,6 +5,7 @@ import { useCookies } from 'react-cookie'
 import ReactDOM from 'react-dom'
 import ReactPaginate from 'react-paginate'
 import { Link } from 'react-router-dom'
+import jwt_decode from 'jwt-decode'
 //import '../stylesheets/satellitesPagination.css'
 
 export default function PaginatedSatellites(props: any) {
@@ -16,7 +17,8 @@ export default function PaginatedSatellites(props: any) {
 
   //Get token from cookies
   const [cookies] = useCookies(['token'])
-  let token = cookies.token
+  let token: any = jwt_decode(cookies.token)
+  let tokenNation = token.nation
 
   const headers = {
     token: token,
@@ -27,7 +29,7 @@ export default function PaginatedSatellites(props: any) {
     console.log(`Loading items from ${itemOffset} to ${endOffset}`)
     setCurrentItems(data.slice(itemOffset, endOffset))
     setPageCount(Math.ceil(data.length / itemsPerPage))
-  }, [itemOffset, itemsPerPage])
+  }, [itemOffset, itemsPerPage, data])
 
   //Delete Product
   const removeSatellite = (_id: any) => {
@@ -54,40 +56,42 @@ export default function PaginatedSatellites(props: any) {
   return (
     <>
       <div className="pensCRUD">
-        {data.map((satellite: any) => {
-          return (
-            <div>
-              <ListGroup>
-                <ListGroupItem>
-                  <div className="d-grid">
-                    <p>
-                      <div className="description">
-                        <strong>{satellite.sideNumber}&nbsp;</strong>{' '}
-                        {satellite.model}&nbsp;{satellite.producer}$
-                      </div>
-                    </p>
+        {currentItems
+          .filter((satellite: any) => satellite.nation == tokenNation)
+          .map((satellite: any) => {
+            return (
+              <div>
+                <ListGroup>
+                  <ListGroupItem>
+                    <div className="d-grid">
+                      <p>
+                        <div className="description">
+                          <strong>{satellite.sideNumber}&nbsp;</strong>{' '}
+                          {satellite.model}&nbsp;{satellite.producer}$
+                        </div>
+                      </p>
 
-                    <div className="listButtons">
-                      <Link
-                        className="btn btn-warning  mr-1 "
-                        to={`../satellites/edit/${satellite._id}`}
-                      >
-                        Edit
-                      </Link>
-                      <Button
-                        className="btn btn-warning  mr-1 "
-                        onClick={() => removeSatellite(satellite._id)}
-                        variant="danger"
-                      >
-                        Delete
-                      </Button>
+                      <div className="listButtons">
+                        <Link
+                          className="btn btn-warning  mr-1 "
+                          to={`../satellites/edit/${satellite._id}`}
+                        >
+                          Edit
+                        </Link>
+                        <Button
+                          className="btn btn-warning  mr-1 "
+                          onClick={() => removeSatellite(satellite._id)}
+                          variant="danger"
+                        >
+                          Delete
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </ListGroupItem>
-              </ListGroup>
-            </div>
-          )
-        })}
+                  </ListGroupItem>
+                </ListGroup>
+              </div>
+            )
+          })}
       </div>
       <ReactPaginate
         breakLabel=".."
