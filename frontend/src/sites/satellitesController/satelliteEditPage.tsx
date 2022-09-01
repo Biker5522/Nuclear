@@ -42,6 +42,8 @@ export const SatelliteEditPage = () => {
 
   const SubmitHandler = async (e: SyntheticEvent) => {
     e.preventDefault()
+    //Year of production validation
+
     //Api connect POST User
     await axios
       .post('/satellites/add', {

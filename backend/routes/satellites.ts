@@ -46,7 +46,7 @@ router.post('/add', async (req: Request, res: Response) => {
   }
 })
 
-//GET specific pen
+//GET specific satellite
 router.get('/:id', async (req: Request, res: Response) => {
   try {
     const satellite = await Satellite.findById(req.params.id)

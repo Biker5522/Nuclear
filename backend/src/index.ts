@@ -29,11 +29,8 @@ if (NODE_ENV === 'production') {
     console.log('0')
   })
 }
-
+let uri: any = process.env.DB_CONNECTION
 //Database
-mongoose.connect(
-  'mongodb+srv://dawid:cichy@rest.xarzi.mongodb.net/NuclearDb?retryWrites=true&w=majority',
-  () => console.log('Connected to Database'),
-)
+mongoose.connect(uri, () => console.log('Connected to Database'))
 
 app.listen(5000, () => console.log('Server Running'))
