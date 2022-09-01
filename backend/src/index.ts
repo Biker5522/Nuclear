@@ -17,7 +17,7 @@ app.use('/', routerUsers)
 
 //Deployment
 __dirname = path.resolve()
-let NODE_ENV = 'producti'
+let NODE_ENV = 'production'
 if (NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/frontend/build')))
   app.get('*', (req, res) => {
@@ -33,4 +33,4 @@ let uri: any = process.env.DB_CONNECTION
 //Database
 mongoose.connect(uri, () => console.log('Connected to Database'))
 
-app.listen(5000, () => console.log('Server Running'))
+app.listen(process.env.PORT || 5000, () => console.log('Server Running'))
