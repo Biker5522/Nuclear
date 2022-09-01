@@ -31,13 +31,9 @@ router.post('/add', async (req: Request, res: Response) => {
     AI: req.body.AI,
     nation: nationToken,
   })
-
-  const dateValid = new Date('1900-01-01')
+  let year = new Date().getFullYear()
   if (
-    !(
-      satellite.yearOfProduction <= Date.now() &&
-      satellite.yearOfProduction > dateValid
-    )
+    !(satellite.yearOfProduction <= year && satellite.yearOfProduction > 1700)
   )
     return res.status(400).send('Invalid year of production')
   //save

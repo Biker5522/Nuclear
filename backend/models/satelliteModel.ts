@@ -19,7 +19,7 @@ const SatelliteSchema = new mongoose.Schema({
     required: true,
   },
   yearOfProduction: {
-    type: Date,
+    type: Number,
     required: true,
   },
   dateOfLaunch: {

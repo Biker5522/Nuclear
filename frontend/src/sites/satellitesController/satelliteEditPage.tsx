@@ -3,6 +3,7 @@ import React, { SyntheticEvent, useEffect, useState } from 'react'
 import { Row, Col, FormGroup, Form, Button } from 'react-bootstrap'
 import { useCookies } from 'react-cookie'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import moment from 'moment'
 
 export const SatelliteEditPage = () => {
   const [sideNumber, setSideNumber] = useState('')
@@ -73,9 +74,9 @@ export const SatelliteEditPage = () => {
         <Col sm={2} />
         <Col sm={8} className="addCard">
           <div className="Card">
-            <h2 className="pt-4">Edit Satellite</h2>
-            <h5 className="AlertDanger">{error}</h5>
             <Form onSubmit={SubmitHandler} className="FormCard">
+              <h2 className="pt-4">Edit Satellite</h2>
+              <h5 className="AlertDanger">{error}</h5>
               <Form.Group>
                 <label>Side Number</label>
                 <Form.Control
@@ -112,7 +113,7 @@ export const SatelliteEditPage = () => {
 
               <label>Year of Production</label>
               <Form.Control
-                type="date"
+                type="number"
                 value={yearOfProduction}
                 onChange={(e: any) => setYearOfProduction(e.target.value)}
               />

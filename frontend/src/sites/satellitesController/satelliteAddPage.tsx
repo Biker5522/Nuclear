@@ -59,9 +59,9 @@ export const SatelliteAddPage = () => {
         <Col sm={2} />
         <Col sm={8} className="addCard">
           <div className="Card">
-            <h2 className="pt-4">New Satellite</h2>
-            <h5 className="AlertDanger">{error}</h5>
             <Form onSubmit={SubmitHandler} className="FormCard">
+              <h2 className="pt-4">New Satellite</h2>
+              <h5 className="AlertDanger">{error}</h5>
               <Form.Group>
                 <label>Side Number</label>
                 <Form.Control
@@ -98,7 +98,7 @@ export const SatelliteAddPage = () => {
 
               <label>Year of Production</label>
               <Form.Control
-                type="date"
+                type="number"
                 value={yearOfProduction}
                 onChange={(e: any) => setYearOfProduction(e.target.value)}
               />
