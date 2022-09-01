@@ -15,6 +15,7 @@ export const SatelliteAddPage = () => {
   const [orbitAltitude, setOrbitAltitude] = useState(0)
   const [AI, setAI] = useState(false)
   const [error, setError] = useState('')
+  let navigate = useNavigate()
 
   //Get token from cookies
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
@@ -40,6 +41,9 @@ export const SatelliteAddPage = () => {
         quantityOfAmmunition: quantityOfAmmunition,
         orbitAltitude: orbitAltitude,
         AI: AI,
+      })
+      .then(() => {
+        navigate('/')
       })
       .catch((error) => {
         if (error.response) {

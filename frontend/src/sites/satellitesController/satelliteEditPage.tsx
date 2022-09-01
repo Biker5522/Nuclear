@@ -17,13 +17,13 @@ export const SatelliteEditPage = () => {
   const [AI, setAI] = useState(false)
   const [error, setError] = useState('')
   const { id } = useParams()
+  let navigate = useNavigate()
 
   //Get token from cookies
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   let token = cookies.token
 
   const headers = {
-    'Content-Type': 'application/json',
     token: token,
   }
   useEffect(() => {
@@ -33,7 +33,7 @@ export const SatelliteEditPage = () => {
       setModel(res.data.model)
       setSoftwareVersion(res.data.softwareVersion)
       setYearOfProduction(res.data.yearOfProduction)
-      setDateOfLaunch(res.data.dateOfLaunch)
+      setDateOfLaunch(moment(res.data.dateOfLaunch).utc().format('YYYY-MM-DD'))
       setQuantityOfAmmunition(res.data.quantityOfAmmunition)
       setOrbitAltitude(res.data.orbitAltitude)
       setAI(res.data.AI)
@@ -46,17 +46,25 @@ export const SatelliteEditPage = () => {
 
     //Api connect POST User
     await axios
-      .post('/satellites/add', {
-        token: token,
-        sideNumber: sideNumber,
-        producer: producer,
-        model: model,
-        softwareVersion: softwareVersion,
-        yearOfProduction: yearOfProduction,
-        dateOfLaunch: dateOfLaunch,
-        quantityOfAmmunition: quantityOfAmmunition,
-        orbitAltitude: orbitAltitude,
-        AI: AI,
+      .put(
+        '/satellites/${id}',
+        {
+          id: id,
+          token: token,
+          sideNumber: sideNumber,
+          producer: producer,
+          model: model,
+          softwareVersion: softwareVersion,
+          yearOfProduction: yearOfProduction,
+          dateOfLaunch: dateOfLaunch,
+          quantityOfAmmunition: quantityOfAmmunition,
+          orbitAltitude: orbitAltitude,
+          AI: AI,
+        },
+        { headers: { token: token } },
+      )
+      .then(() => {
+        navigate('/')
       })
       .catch((error) => {
         if (error.response) {

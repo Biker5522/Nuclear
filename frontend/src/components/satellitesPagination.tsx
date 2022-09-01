@@ -4,11 +4,12 @@ import { Button, Form, ListGroup, ListGroupItem } from 'react-bootstrap'
 import { useCookies } from 'react-cookie'
 import ReactDOM from 'react-dom'
 import ReactPaginate from 'react-paginate'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
-//import '../stylesheets/satellitesPagination.css'
+import '../stylesheets/satellitesPagination.css'
 
 export default function PaginatedSatellites(props: any) {
+  let navigate = useNavigate()
   const { data } = props
   const [currentItems, setCurrentItems] = useState<any>([])
   const [pageCount, setPageCount] = useState(0)
@@ -35,13 +36,11 @@ export default function PaginatedSatellites(props: any) {
   const removeSatellite = (_id: any) => {
     let id: String = _id
     axios
-      .delete(`/satellites/${_id}`, { headers })
-      .then(function (response) {
-        window.location.reload()
-      })
+      .delete(`/satellites/${_id}`, { headers: { token: token } })
       .catch(function (error) {
         console.log(error)
       })
+    window.location.reload()
   }
 
   // Invoke when user click to request another page.
@@ -55,7 +54,7 @@ export default function PaginatedSatellites(props: any) {
 
   return (
     <>
-      <div className="pensCRUD">
+      <div className="satellitesCRUD">
         {currentItems
           .filter((satellite: any) => satellite.nation == tokenNation)
           .map((satellite: any) => {

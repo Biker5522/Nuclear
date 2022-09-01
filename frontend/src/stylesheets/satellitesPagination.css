@@ -1,0 +1,59 @@
+.HomeSatellitesMain {
+  display: block;
+  align-items: center;
+}
+.satellites {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(auto, 320px));
+  grid-template-rows: 2fr;
+  padding: 0 auto;
+  justify-items: center;
+  grid-gap: 30px;
+  justify-content: center;
+}
+.card {
+  display: flex;
+  aspect-ratio: 3/3;
+}
+.paginationNumbers {
+  margin-top: 10px;
+  align-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: azure;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  font-size: 1.4rem;
+}
+.pagination .page-num {
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: 400;
+  padding: 3px 4px;
+  color: black;
+  border: 2px solid grey;
+  margin: 2px;
+  background-color: rgba(240, 255, 255, 0.807);
+  font-size: 22px;
+  font-weight: bold;
+}
+.pagination .page-num active {
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: 400;
+  padding: 3px 4px;
+  color: black;
+  background-color: chartreuse;
+  border: 2px solid rgba(30, 255, 0, 0.397);
+  margin: 2px;
+}
+
+.pagination .page-num:hover {
+  background-color: rgba(165, 42, 42, 0.378);
+  color: white;
+}

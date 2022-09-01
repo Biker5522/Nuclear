@@ -2,6 +2,7 @@ import express, { Response, Request } from 'express'
 const router = express.Router()
 const Satellite = require('../models/satelliteModel')
 import jwt_decode from 'jwt-decode'
+import mongoose from 'mongoose'
 
 //GET
 router.get('/', async (req: Request, res: Response) => {
@@ -48,8 +49,12 @@ router.post('/add', async (req: Request, res: Response) => {
 
 //GET specific satellite
 router.get('/:id', async (req: Request, res: Response) => {
+  let token: any = req.headers['token']
+  let decodedToken: any = jwt_decode(token)
+  let nationToken = decodedToken.nation
   try {
     const satellite = await Satellite.findById(req.params.id)
+    if (satellite.nation != nationToken) res.status(400).send('No permissions')
     return res.status(200).json(satellite)
   } catch (err) {
     const result = (err as Error).message
@@ -72,7 +77,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
 router.put('/:id', async (req: Request, res: Response) => {
   try {
     const updatedSatellite = await Satellite.findByIdAndUpdate(
-      { _id: req.params.id },
+      { _id: req.body.id },
       {
         sideNumber: req.body.sideNumber,
         producer: req.body.producer,
@@ -83,8 +88,7 @@ router.put('/:id', async (req: Request, res: Response) => {
         quantityOfAmunnition: req.body.quantityOfAmmunition,
         orbitAltitude: req.body.orbitAltitude,
         AI: req.body.AI,
-        dateOfCreation: req.body.dateOfCreation,
-        dateOfLastUpdate: req.body.dateOfLastUpdate,
+        dateOfLastUpdate: Date.now(),
       },
     )
     return res.status(200).json(updatedSatellite)
