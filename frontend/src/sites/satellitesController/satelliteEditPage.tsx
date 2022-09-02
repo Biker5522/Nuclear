@@ -163,7 +163,7 @@ export const SatelliteEditPage = () => {
                 <Button type="submit" variant="success">
                   Submit
                 </Button>
-                <Link to="" className="btn btn-danger ml-2">
+                <Link to="/" className="btn btn-danger ml-2">
                   Cancel
                 </Link>
               </div>

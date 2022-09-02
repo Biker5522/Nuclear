@@ -34,9 +34,17 @@ router.post('/add', async (req: Request, res: Response) => {
   })
   let year = new Date().getFullYear()
   if (
-    !(satellite.yearOfProduction <= year && satellite.yearOfProduction > 1700)
+    !(satellite.yearOfProduction <= year && satellite.yearOfProduction > 1900)
   )
     return res.status(400).send('Invalid year of production')
+  let startDate = new Date('1970-01-01T00:00:01')
+
+  if (
+    !(
+      satellite.dateOfLaunch <= Date.now() && satellite.dateOfLaunch > startDate
+    )
+  )
+    return res.status(400).send('Invalid date of launch')
   //save
   try {
     const savedSatellite = await satellite.save()
