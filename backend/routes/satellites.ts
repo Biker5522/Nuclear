@@ -82,7 +82,7 @@ router.put('/:id', async (req: Request, res: Response) => {
         sideNumber: req.body.sideNumber,
         producer: req.body.producer,
         model: req.body.model,
-        softwareVersions: req.body.softwareVersion,
+        softwareVersion: req.body.softwareVersion,
         yearOfProduction: req.body.yearOfProduction,
         dateOfLaunch: req.body.dateOfLaunch,
         quantityOfAmunnition: req.body.quantityOfAmmunition,

@@ -33,9 +33,8 @@ export const RegisterPage = () => {
         nation: nation,
         nuclearButton: nuclearButton,
       })
-      //Set Cookie
       .then(() => {
-        navigate('/login')
+        navigate('/')
       })
       .catch((error) => {
         if (error.response) {
