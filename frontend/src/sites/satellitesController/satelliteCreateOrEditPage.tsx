@@ -1,10 +1,11 @@
 import axios from 'axios'
-import React, { SyntheticEvent, useState } from 'react'
+import React, { SyntheticEvent, useEffect, useState } from 'react'
 import { Row, Col, FormGroup, Form, Button } from 'react-bootstrap'
 import { useCookies } from 'react-cookie'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import moment from 'moment'
 
-export const SatelliteAddPage = () => {
+export const SatelliteCreateOrEditPage = () => {
   const [sideNumber, setSideNumber] = useState('')
   const [producer, setProducer] = useState('')
   const [model, setModel] = useState('')
@@ -15,6 +16,7 @@ export const SatelliteAddPage = () => {
   const [orbitAltitude, setOrbitAltitude] = useState(0)
   const [AI, setAI] = useState(false)
   const [error, setError] = useState('')
+  const { id } = useParams()
   let navigate = useNavigate()
 
   //Get token from cookies
@@ -22,35 +24,81 @@ export const SatelliteAddPage = () => {
   let token = cookies.token
 
   const headers = {
-    'Content-Type': 'application/json',
     token: token,
   }
+  useEffect(() => {
+    if (id != null) {
+      axios(`/satellites/${id}`, { headers }).then((res: any) => {
+        setSideNumber(res.data.sideNumber)
+        setProducer(res.data.producer)
+        setModel(res.data.model)
+        setSoftwareVersion(res.data.softwareVersion)
+        setYearOfProduction(res.data.yearOfProduction)
+        setDateOfLaunch(
+          moment(res.data.dateOfLaunch).utc().format('YYYY-MM-DD'),
+        )
+        setQuantityOfAmmunition(res.data.quantityOfAmmunition)
+        setOrbitAltitude(res.data.orbitAltitude)
+        setAI(res.data.AI)
+      })
+    }
+  }, [id])
 
   const SubmitHandler = async (e: SyntheticEvent) => {
     e.preventDefault()
-    //Api connect POST User
-    await axios
-      .post('/satellites/add', {
-        token: token,
-        sideNumber: sideNumber,
-        producer: producer,
-        model: model,
-        softwareVersion: softwareVersion,
-        yearOfProduction: yearOfProduction,
-        dateOfLaunch: dateOfLaunch,
-        quantityOfAmmunition: quantityOfAmmunition,
-        orbitAltitude: orbitAltitude,
-        AI: AI,
-      })
-      .then(() => {
-        navigate('/')
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.log(error)
-          setError(error.response.data)
-        }
-      })
+    //Add Satellite
+    if (id == null) {
+      await axios
+        .post('/satellites', {
+          token: token,
+          sideNumber: sideNumber,
+          producer: producer,
+          model: model,
+          softwareVersion: softwareVersion,
+          yearOfProduction: yearOfProduction,
+          dateOfLaunch: dateOfLaunch,
+          quantityOfAmmunition: quantityOfAmmunition,
+          orbitAltitude: orbitAltitude,
+          AI: AI,
+        })
+        .then(() => {
+          navigate('/')
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.log(error)
+            setError(error.response.data)
+          }
+        })
+    }
+    //Edit Satellite
+    else
+      await axios
+        .put(
+          '/satellites/${id}',
+          {
+            token: token,
+            sideNumber: sideNumber,
+            producer: producer,
+            model: model,
+            softwareVersion: softwareVersion,
+            yearOfProduction: yearOfProduction,
+            dateOfLaunch: dateOfLaunch,
+            quantityOfAmmunition: quantityOfAmmunition,
+            orbitAltitude: orbitAltitude,
+            AI: AI,
+          },
+          { headers: { token: token } },
+        )
+        .then(() => {
+          navigate('/')
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.log(error)
+            setError(error.response.data)
+          }
+        })
   }
 
   const onSwitchAction = () => {
@@ -64,7 +112,11 @@ export const SatelliteAddPage = () => {
         <Col sm={8} className="addCard">
           <div className="Card">
             <Form onSubmit={SubmitHandler} className="FormCard">
-              <h2 className="pt-4">New Satellite</h2>
+              {id == null ? (
+                <h2 className="pt-4">Add Satellite</h2>
+              ) : (
+                <h2 className="pt-4">Edit Satellite</h2>
+              )}
               <h5 className="AlertDanger">{error}</h5>
               <Form.Group>
                 <label>Side Number</label>
@@ -142,7 +194,7 @@ export const SatelliteAddPage = () => {
                 <Button type="submit" variant="success">
                   Submit
                 </Button>
-                <Link to="" className="btn btn-danger ml-2">
+                <Link to="/" className="btn btn-danger ml-2">
                   Cancel
                 </Link>
               </div>

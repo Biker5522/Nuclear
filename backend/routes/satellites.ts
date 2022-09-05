@@ -6,8 +6,13 @@ import mongoose from 'mongoose'
 
 //GET
 router.get('/', async (req: Request, res: Response) => {
+  let token: any = req.headers['token']
+  if (!token) return res.status(400).json('Invalid Token')
+  let decodedToken: any = jwt_decode(token)
+  let nationToken = decodedToken.nation
   try {
-    const satellites = await Satellite.find()
+    const satellites = await Satellite.find({ nation: nationToken })
+    if (!satellites) return res.status(404)
     return res.status(200).json({ satellites })
   } catch (err) {
     const result = (err as Error).message
@@ -16,10 +21,11 @@ router.get('/', async (req: Request, res: Response) => {
 })
 
 //POST
-router.post('/add', async (req: Request, res: Response) => {
-  let decodedToken: any = jwt_decode(req.body.token)
+router.post('/', async (req: Request, res: Response) => {
+  let token: any = req.headers['token']
+  if (!token) return res.status(400).json('Invalid Token')
+  let decodedToken: any = jwt_decode(token)
   let nationToken = decodedToken.nation
-  console.log(decodedToken)
   const satellite = new Satellite({
     sideNumber: req.body.sideNumber,
     producer: req.body.producer,
@@ -38,7 +44,6 @@ router.post('/add', async (req: Request, res: Response) => {
   )
     return res.status(400).send('Invalid year of production')
   let startDate = new Date('1970-01-01T00:00:01')
-
   if (
     !(
       satellite.dateOfLaunch <= Date.now() && satellite.dateOfLaunch > startDate
@@ -50,23 +55,33 @@ router.post('/add', async (req: Request, res: Response) => {
     const savedSatellite = await satellite.save()
     return res.status(201).json(savedSatellite)
   } catch (err) {
-    const result = (err as Error).message
-    return res.status(400).json({ result })
+    if (err instanceof Error) {
+      const result = err.message
+      return res.status(400).json({ result })
+    } else {
+      console.log('Unexpected error', err)
+    }
   }
 })
 
 //GET specific satellite
 router.get('/:id', async (req: Request, res: Response) => {
-  let token: any = req.headers['token']
-  let decodedToken: any = jwt_decode(token)
-  let nationToken = decodedToken.nation
   try {
+    let token: any = req.headers['token']
+    if (!token) return res.status(400).json('Invalid Token')
+    let decodedToken: any = jwt_decode(token)
+    let nationToken = decodedToken.nation
     const satellite = await Satellite.findById(req.params.id)
+    if (!satellite) return res.status(404)
     if (satellite.nation != nationToken) res.status(400).send('No permissions')
     return res.status(200).json(satellite)
   } catch (err) {
-    const result = (err as Error).message
-    return res.status(400).json({ result })
+    if (err instanceof Error) {
+      const result = err.message
+      return res.status(400).json({ result })
+    } else {
+      console.log('Unexpected error', err)
+    }
   }
 })
 
@@ -76,16 +91,23 @@ router.delete('/:id', async (req: Request, res: Response) => {
     const removedSatellite = await Satellite.deleteOne({ _id: req.params.id })
     return res.status(204)
   } catch (err) {
-    const result = (err as Error).message
-    return res.status(400).json({ result })
+    if (err instanceof Error) {
+      const result = err.message
+      return res.status(400).json({ result })
+    } else {
+      console.log('Unexpected error', err)
+    }
   }
 })
 
 //PUT
 router.put('/:id', async (req: Request, res: Response) => {
   try {
+    const satellite = await Satellite.exists({ _id: req.params.id })
+    if (satellite == null) return res.status(404)
+    console.log(satellite)
     const updatedSatellite = await Satellite.findByIdAndUpdate(
-      { _id: req.body.id },
+      { _id: req.params.id },
       {
         sideNumber: req.body.sideNumber,
         producer: req.body.producer,
@@ -101,8 +123,12 @@ router.put('/:id', async (req: Request, res: Response) => {
     )
     return res.status(200).json(updatedSatellite)
   } catch (err) {
-    const result = (err as Error).message
-    return res.status(400).json({ result })
+    if (err instanceof Error) {
+      const result = err.message
+      return res.status(400).json({ result })
+    } else {
+      return res.status(400).json('Unexpected error')
+    }
   }
 })
 

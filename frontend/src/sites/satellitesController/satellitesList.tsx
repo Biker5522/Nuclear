@@ -6,12 +6,21 @@ import Satellites from '../../components/satellitesPagination'
 //import '../../stylesheets/pensPaginationCRUD.css'
 
 import axios from 'axios'
+import { useCookies } from 'react-cookie'
 
 export const SatellitesListPage = () => {
+  //Get token from cookies
+  const [cookies, setCookie, removeCookie] = useCookies(['token'])
+  let token = cookies.token
+
+  const headers = {
+    'Content-Type': 'application/json',
+    token: token,
+  }
   const [backendData, setBackendData] = useState<any>([])
   //Get pens from Menu
   useEffect(() => {
-    axios('/satellites').then((res) => {
+    axios('/satellites', { headers }).then((res) => {
       setBackendData(res.data.satellites)
     })
   }, [])

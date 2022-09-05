@@ -5,10 +5,9 @@ import { BrowserRouter as Router, Routes, Link, Route } from 'react-router-dom'
 import { LoginPage } from '../sites/loginPage'
 import { RegisterPage } from '../sites/registerPage'
 import { SatellitesListPage } from '../sites/satellitesController/satellitesList'
-import { SatelliteAddPage } from '../sites/satellitesController/satelliteAddPage'
 import { useCookies } from 'react-cookie'
 import jwt_decode from 'jwt-decode'
-import { SatelliteEditPage } from '../sites/satellitesController/satelliteEditPage'
+import { SatelliteCreateOrEditPage } from '../sites/satellitesController/satelliteCreateOrEditPage'
 
 function NavbarNuclear() {
   //Get token from cookies
@@ -18,6 +17,7 @@ function NavbarNuclear() {
   //Logout
   function Logout() {
     removeCookie('token')
+    window.location.reload()
   }
 
   if (token != null) {
@@ -54,8 +54,14 @@ function NavbarNuclear() {
         <Routes>
           <Route path="/" element={<SatellitesListPage />} />
           <Route path="/satellites" element={<SatellitesListPage />} />
-          <Route path="/satellites/add" element={<SatelliteAddPage />} />
-          <Route path="/satellites/edit/:id" element={<SatelliteEditPage />} />
+          <Route
+            path="/satellites/add"
+            element={<SatelliteCreateOrEditPage />}
+          />
+          <Route
+            path="/satellites/edit/:id"
+            element={<SatelliteCreateOrEditPage />}
+          />
         </Routes>
       </Router>
     )
