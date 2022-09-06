@@ -49,24 +49,30 @@ export const SatelliteCreateOrEditPage = () => {
     //Add Satellite
     if (id == null) {
       await axios
-        .post('/satellites', {
-          token: token,
-          sideNumber: sideNumber,
-          producer: producer,
-          model: model,
-          softwareVersion: softwareVersion,
-          yearOfProduction: yearOfProduction,
-          dateOfLaunch: dateOfLaunch,
-          quantityOfAmmunition: quantityOfAmmunition,
-          orbitAltitude: orbitAltitude,
-          AI: AI,
-        })
+        .post(
+          '/satellites',
+          {
+            sideNumber: sideNumber,
+            producer: producer,
+            model: model,
+            softwareVersion: softwareVersion,
+            yearOfProduction: yearOfProduction,
+            dateOfLaunch: dateOfLaunch,
+            quantityOfAmmunition: quantityOfAmmunition,
+            orbitAltitude: orbitAltitude,
+            AI: AI,
+          },
+          { headers },
+        )
         .then(() => {
           navigate('/')
         })
         .catch((error) => {
-          if (error.response) {
-            console.log(error)
+          if (error.response.data.errors) {
+            console.log(error.response.data.errors[0].msg)
+            setError(error.response.data.errors[0].msg)
+          } else if (error.response) {
+            console.log(error.response.data)
             setError(error.response.data)
           }
         })
@@ -75,7 +81,7 @@ export const SatelliteCreateOrEditPage = () => {
     else
       await axios
         .put(
-          '/satellites/${id}',
+          `/satellites/${id}`,
           {
             token: token,
             sideNumber: sideNumber,
@@ -88,7 +94,7 @@ export const SatelliteCreateOrEditPage = () => {
             orbitAltitude: orbitAltitude,
             AI: AI,
           },
-          { headers: { token: token } },
+          { headers },
         )
         .then(() => {
           navigate('/')
@@ -101,6 +107,7 @@ export const SatelliteCreateOrEditPage = () => {
         })
   }
 
+  //AI Switch
   const onSwitchAction = () => {
     setAI(!AI)
   }

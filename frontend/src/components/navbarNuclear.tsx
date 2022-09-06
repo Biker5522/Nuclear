@@ -16,7 +16,7 @@ function NavbarNuclear() {
 
   //Logout
   function Logout() {
-    removeCookie('token')
+    removeCookie('token', { path: '/' })
     window.location.reload()
   }
 
@@ -43,7 +43,7 @@ function NavbarNuclear() {
                   </Nav.Link>
                 </Nav>
                 <Nav>
-                  <Nav.Link as={Link} onClick={Logout} to={'/'}>
+                  <Nav.Link as={Link} onClick={Logout} to={''}>
                     Logout
                   </Nav.Link>
                 </Nav>
