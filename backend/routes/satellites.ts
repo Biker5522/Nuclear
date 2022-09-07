@@ -4,7 +4,9 @@ const Satellite = require('../models/satelliteModel')
 import jwt_decode from 'jwt-decode'
 import mongoose from 'mongoose'
 const { body, validationResult } = require('express-validator')
-const { SatellitesValidator } = require('../middle/satellitesValidation.tsx')
+const {
+  SatellitesValidator,
+} = require('../middlewares/satellitesValidation.tsx')
 
 //GET
 router.get('/', async (req: Request, res: Response) => {

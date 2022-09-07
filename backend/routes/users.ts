@@ -12,25 +12,25 @@ router.post(
     .notEmpty()
     .withMessage('email required')
     .isEmail()
-    .withMessage('must be an email')
+    .withMessage('must be an valid email')
     .normalizeEmail(),
   body('fullName')
     .notEmpty()
     .withMessage('fullname required')
     .isLength({ min: 3 })
-    .withMessage('full name must be at least 3 chars long'),
+    .withMessage('full name must be at least 3 characters long'),
   body('password')
     .notEmpty()
     .withMessage('password required')
     .isLength({ min: 6 })
     .withMessage('password must be at least 6 chars long')
     .matches(/\d/)
-    .withMessage('must contain a number')
+    .withMessage('password must contain a number')
     .matches(/[!@#$%^&*(),.?":{}|<>]/)
     .withMessage('your password should have at least one special character'),
   body('nuclearButton')
     .notEmpty()
-    .withMessage('nuxlear button required')
+    .withMessage('nuclear button required')
     .isBoolean({ loose: true })
     .withMessage('nuclear button must be boolean'),
   body('nation').notEmpty().withMessage('nation required'),
@@ -53,9 +53,11 @@ router.post(
     const nationExist = await nationsList.includes(req.body.nation)
     if (!nationExist) return res.status(400).send('No such nation')
 
-    const nationPresidentExist = await User.find({ nation: req.body.nation })
-    if (nationPresidentExist)
+    const nationPresidentExist = await User.findOne({ nation: req.body.nation })
+    console.log(nationPresidentExist)
+    if (nationPresidentExist != null) {
       return res.status(400).send('There is already president of that country')
+    }
 
     //save
     try {

@@ -5,3 +5,6 @@ body {
   background-image: url(https://images.theconversation.com/files/379516/original/file-20210119-15-tmyvf4.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=900.0&fit=crop);
   background-size: 100%;
 }
+.AlertDanger {
+  color: red;
+}
