@@ -14,9 +14,11 @@ router.get('/', async (req: Request, res: Response) => {
   if (!token) return res.status(400).json('Invalid Token')
   let decodedToken: any = jwt_decode(token)
   let nationToken = decodedToken.nation
+  const satellites = await Satellite.find({ nation: nationToken })
+  if (satellites.length <= 0) {
+    return res.status(404).send('no satellites')
+  }
   try {
-    const satellites = await Satellite.find({ nation: nationToken })
-    if (!satellites) return res.status(404)
     return res.status(200).json({ satellites })
   } catch (err) {
     const result = (err as Error).message
@@ -60,13 +62,15 @@ router.post('/', SatellitesValidator, async (req: Request, res: Response) => {
 
 //GET specific satellite
 router.get('/:id', async (req: Request, res: Response) => {
+  const satellite = await Satellite.findById(req.params.id)
+  if (satellite == null) return res.status(404).send('no such satellite')
   try {
+    console.log(satellite)
     let token: any = req.headers['token']
     if (!token) return res.status(400).json('Invalid Token')
     let decodedToken: any = jwt_decode(token)
     let nationToken = decodedToken.nation
-    const satellite = await Satellite.findById(req.params.id)
-    if (!satellite) return res.status(404)
+
     if (satellite.nation != nationToken) res.status(400).send('No permissions')
     return res.status(200).json(satellite)
   } catch (err) {
