@@ -14,16 +14,14 @@ import { SatellitesListPage } from '../sites/satellitesController/satellitesList
 import { useCookies } from 'react-cookie'
 import jwt_decode from 'jwt-decode'
 import { SatelliteCreateOrEditPage } from '../sites/satellitesController/satelliteCreateOrEditPage'
-import { useNavigate } from 'react-router-dom'
 function NavbarNuclear() {
   //Get token from cookies
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   let token = cookies.token
-  const nav = useNavigate()
+
   //Logout
-  function Logout() {
+  async function Logout() {
     removeCookie('token', { path: '/' })
-    nav('/')
   }
 
   if (token != null) {
