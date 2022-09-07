@@ -37,7 +37,11 @@ export const RegisterPage = () => {
         navigate('/')
       })
       .catch((error) => {
-        if (error.response) {
+        if (error.response.data.errors) {
+          console.log(error.response.data.errors[0].msg)
+          setError(error.response.data.errors[0].msg)
+        } else if (error.response) {
+          console.log(error.response.data)
           setError(error.response.data)
         }
       })

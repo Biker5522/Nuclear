@@ -1,4 +1,4 @@
-export let nationsList = [
+exports.nationsList = [
   'Afghanistan',
   'Albania',
   'Algeria',

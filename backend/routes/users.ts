@@ -2,6 +2,7 @@ import express from 'express'
 const router = express.Router()
 const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
+const { nationsList } = require('../components/nationsList.tsx')
 import bcrypt from 'bcrypt'
 const { body, validationResult } = require('express-validator')
 //POST Add User
@@ -35,7 +36,7 @@ router.post(
   body('nation').notEmpty().withMessage('nation required'),
   async (req: any, res: any) => {
     var err = validationResult(req)
-    if (!err.isEmpty()) return res.status(400).send(err.mapped())
+    if (!err.isEmpty()) return res.status(400).send(err)
     //Add
     const user = new User({
       fullName: req.body.fullName,
@@ -49,9 +50,13 @@ router.post(
     if (emailExist) return res.status(400).send('Email exist')
 
     //Check nation
-    const nationPresidentExist = await User.findOne({ nation: req.body.nation })
+    const nationExist = await nationsList.includes(req.body.nation)
+    if (!nationExist) return res.status(400).send('No such nation')
+
+    const nationPresidentExist = await User.find({ nation: req.body.nation })
     if (nationPresidentExist)
       return res.status(400).send('There is already president of that country')
+
     //save
     try {
       const savedUser = await user.save()
