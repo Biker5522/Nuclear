@@ -26,16 +26,7 @@ export const SatelliteCreateOrEditPage = () => {
   const headers = {
     token: token,
   }
-  //satellites catch
-  const catchFunc = (error: any) => {
-    if (error.response.data.errors) {
-      console.log(error.response.data.errors[0].msg)
-      setError(error.response.data.errors[0].msg)
-    } else if (error.response) {
-      console.log(error.response.data)
-      setError(error.response.data)
-    }
-  }
+  //satellites axios body
   let body = {
     sideNumber: sideNumber,
     producer: producer,
@@ -47,7 +38,17 @@ export const SatelliteCreateOrEditPage = () => {
     orbitAltitude: orbitAltitude,
     AI: AI,
   }
-
+  //satellites catch
+  const catchFunc = (error: any) => {
+    if (error.response.data.errors) {
+      console.log(error.response.data.errors[0].msg)
+      setError(error.response.data.errors[0].msg)
+    } else if (error.response) {
+      console.log(error.response.data)
+      setError(error.response.data)
+    }
+  }
+  //Get Satellites
   useEffect(() => {
     if (id != null) {
       axios(`/satellites/${id}`, { headers }).then((res: any) => {

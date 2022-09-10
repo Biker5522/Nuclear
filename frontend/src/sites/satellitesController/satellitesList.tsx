@@ -23,7 +23,7 @@ export const SatellitesListPage = () => {
     axios('/satellites', { headers }).then((res) => {
       setBackendData(res.data.satellites)
     })
-  }, [])
+  }, [backendData])
 
   return (
     <div className="">
