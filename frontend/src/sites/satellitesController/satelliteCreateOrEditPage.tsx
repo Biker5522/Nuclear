@@ -22,9 +22,21 @@ export const SatelliteCreateOrEditPage = () => {
   //Get token from cookies
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   let token = cookies.token
-
+  //satellites header
   const headers = {
     token: token,
+  }
+  //satellites body
+  const satellitesBody = {
+    sideNumber: sideNumber,
+    producer: producer,
+    model: model,
+    softwareVersion: softwareVersion,
+    yearOfProduction: yearOfProduction,
+    dateOfLaunch: dateOfLaunch,
+    quantityOfAmmunition: quantityOfAmmunition,
+    orbitAltitude: orbitAltitude,
+    AI: AI,
   }
   useEffect(() => {
     if (id != null) {
@@ -52,15 +64,7 @@ export const SatelliteCreateOrEditPage = () => {
         .post(
           '/satellites',
           {
-            sideNumber: sideNumber,
-            producer: producer,
-            model: model,
-            softwareVersion: softwareVersion,
-            yearOfProduction: yearOfProduction,
-            dateOfLaunch: dateOfLaunch,
-            quantityOfAmmunition: quantityOfAmmunition,
-            orbitAltitude: orbitAltitude,
-            AI: AI,
+            satellitesBody,
           },
           { headers },
         )
@@ -83,16 +87,7 @@ export const SatelliteCreateOrEditPage = () => {
         .put(
           `/satellites/${id}`,
           {
-            token: token,
-            sideNumber: sideNumber,
-            producer: producer,
-            model: model,
-            softwareVersion: softwareVersion,
-            yearOfProduction: yearOfProduction,
-            dateOfLaunch: dateOfLaunch,
-            quantityOfAmmunition: quantityOfAmmunition,
-            orbitAltitude: orbitAltitude,
-            AI: AI,
+            satellitesBody,
           },
           { headers },
         )
