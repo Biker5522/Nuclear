@@ -26,8 +26,17 @@ export const SatelliteCreateOrEditPage = () => {
   const headers = {
     token: token,
   }
-  //satellites body
-  const satellitesBody = {
+  //satellites catch
+  const catchFunc = (error: any) => {
+    if (error.response.data.errors) {
+      console.log(error.response.data.errors[0].msg)
+      setError(error.response.data.errors[0].msg)
+    } else if (error.response) {
+      console.log(error.response.data)
+      setError(error.response.data)
+    }
+  }
+  let body = {
     sideNumber: sideNumber,
     producer: producer,
     model: model,
@@ -38,6 +47,7 @@ export const SatelliteCreateOrEditPage = () => {
     orbitAltitude: orbitAltitude,
     AI: AI,
   }
+
   useEffect(() => {
     if (id != null) {
       axios(`/satellites/${id}`, { headers }).then((res: any) => {
@@ -61,48 +71,20 @@ export const SatelliteCreateOrEditPage = () => {
     //Add Satellite
     if (id == null) {
       await axios
-        .post(
-          '/satellites',
-          {
-            satellitesBody,
-          },
-          { headers },
-        )
+        .post('/satellites', body, { headers })
         .then(() => {
           navigate('/')
         })
-        .catch((error) => {
-          if (error.response.data.errors) {
-            console.log(error.response.data.errors[0].msg)
-            setError(error.response.data.errors[0].msg)
-          } else if (error.response) {
-            console.log(error.response.data)
-            setError(error.response.data)
-          }
-        })
+        .catch(catchFunc)
     }
     //Edit Satellite
     else
       await axios
-        .put(
-          `/satellites/${id}`,
-          {
-            satellitesBody,
-          },
-          { headers },
-        )
+        .put(`/satellites/${id}`, body, { headers })
         .then(() => {
           navigate('/')
         })
-        .catch((error) => {
-          if (error.response.data.errors) {
-            console.log(error.response.data.errors[0].msg)
-            setError(error.response.data.errors[0].msg)
-          } else if (error.response) {
-            console.log(error.response.data)
-            setError(error.response.data)
-          }
-        })
+        .catch(catchFunc)
   }
 
   //AI Switch
