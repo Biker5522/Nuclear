@@ -3,7 +3,7 @@ const router = express.Router()
 const Satellite = require('../models/satelliteModel')
 import jwt_decode from 'jwt-decode'
 import mongoose from 'mongoose'
-const { validationResult } = require('express-validator')
+const { body, validationResult } = require('express-validator')
 const {
   SatellitesValidator,
 } = require('../middlewares/satellitesValidation.tsx')
@@ -14,11 +14,11 @@ router.get('/', async (req: Request, res: Response) => {
   if (!token) return res.status(400).json('Invalid Token')
   let decodedToken: any = jwt_decode(token)
   let nationToken = decodedToken.nation
-  const satellites = await Satellite.find({ nation: nationToken })
-  if (!satellites) {
-    return res.status(404).send('satellites error')
-  }
   try {
+    const satellites = await Satellite.find({ nation: nationToken })
+    if (!satellites) {
+      return res.status(404).send('satellites error')
+    }
     return res.status(200).json({ satellites })
   } catch (err) {
     const result = (err as Error).message
