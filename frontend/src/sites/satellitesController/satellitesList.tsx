@@ -18,7 +18,7 @@ export const SatellitesListPage = () => {
     token: token,
   }
   const [backendData, setBackendData] = useState<any>([])
-  //Get pens from Menu
+  //Get satellites
   useEffect(() => {
     axios('/satellites', { headers }).then((res) => {
       setBackendData(res.data.satellites)

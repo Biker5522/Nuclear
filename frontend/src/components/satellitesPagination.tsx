@@ -7,6 +7,8 @@ import ReactPaginate from 'react-paginate'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
 import '../stylesheets/satellitesPagination.css'
+import { confirmAlert } from 'react-confirm-alert'
+import 'react-confirm-alert/src/react-confirm-alert.css'
 
 export default function PaginatedSatellites(props: any) {
   let navigate = useNavigate()
@@ -32,6 +34,24 @@ export default function PaginatedSatellites(props: any) {
     setPageCount(Math.ceil(data.length / itemsPerPage))
   }, [itemOffset, itemsPerPage, data])
 
+  //Confirmation
+  const confirmationDelete = (_id: any) => {
+    confirmAlert({
+      title: 'Confirm to delete satellite',
+      message: 'Are you sure to do this.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => removeSatellite(_id),
+        },
+        {
+          label: 'No',
+          onClick: () => alert('Click No'),
+        },
+      ],
+    })
+  }
+
   //Delete Product
   const removeSatellite = (_id: any) => {
     let id: String = _id
@@ -40,7 +60,9 @@ export default function PaginatedSatellites(props: any) {
       .catch(function (error) {
         console.log(error)
       })
-    window.location.reload()
+      .then(() => {
+        window.location.reload()
+      })
   }
 
   // Invoke when user click to request another page.
@@ -79,7 +101,7 @@ export default function PaginatedSatellites(props: any) {
                         </Link>
                         <Button
                           className="btn btn-warning  mr-1 "
-                          onClick={() => removeSatellite(satellite._id)}
+                          onClick={() => confirmationDelete(satellite._id)}
                           variant="danger"
                         >
                           Delete
