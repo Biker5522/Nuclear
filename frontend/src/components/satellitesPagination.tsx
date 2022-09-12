@@ -29,7 +29,6 @@ export default function PaginatedSatellites(props: any) {
 
   useEffect(() => {
     const endOffset = itemOffset + itemsPerPage
-    console.log(`Loading items from ${itemOffset} to ${endOffset}`)
     setCurrentItems(data.slice(itemOffset, endOffset))
     setPageCount(Math.ceil(data.length / itemsPerPage))
   }, [itemOffset, itemsPerPage, data])
